@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  mongo:
+    image: "mongo"
+    restart: "always"
+    ports:
+        - "27017:27017"
+    volumes:
+      - /data/db
+  api:
+    image: "notes-api"
+    environment:
+      NOTES_DEBUG: "false"
+      NOTES_HOST: 0.0.0.0
+      NOTES_PORT: 8000
+      NOTES_MONGO_URL: mongodb://mongo:27017/notes
+    ports:
+      - "8000:8000"
+
