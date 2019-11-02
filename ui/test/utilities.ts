@@ -1,5 +1,6 @@
 import {format} from 'date-fns'
-import {SpyInstance} from 'jest'
+// @ts-ignore
+import SpyInstance = jest.SpyInstance
 
 export function asMock(f: Function): SpyInstance {
   return f as unknown as SpyInstance
