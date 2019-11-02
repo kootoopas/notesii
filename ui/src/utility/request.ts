@@ -1,10 +1,10 @@
-import { from, Observable, throwError, of } from "rxjs"
+import { from, Observable, throwError } from "rxjs"
 import { mergeMap } from "rxjs/operators"
 
-export function request(
+export function request<T extends any>(
   url: string,
   init: RequestInit | {body?: Record<string, string>}
-): Observable<any | never> {
+): Observable<T> {
 
   return from(fetch(
     url,

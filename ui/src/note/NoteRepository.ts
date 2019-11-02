@@ -77,7 +77,7 @@ export class NoteRepository {
       .pipe(map(_ => true))
   }
 
-  private catchError(): OperatorFunction<never, never> {
+  private catchError(): OperatorFunction<Note, Note> {
     return catchError((response: Response) => {
       return from(response.json())
         .pipe(
@@ -85,6 +85,4 @@ export class NoteRepository {
         )
     })
   }
-
-
 }
