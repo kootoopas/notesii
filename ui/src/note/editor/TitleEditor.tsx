@@ -8,7 +8,7 @@ export interface TitleEditorProps {
   onTitleChange: (title: string) => void
 }
 
-interface TitleEditorState {
+export interface TitleEditorState {
   title?: string
 }
 
@@ -31,7 +31,6 @@ export default class TitleEditor extends Component<TitleEditorProps, TitleEditor
     }
 
     if (this.props.id !== prevProps.id) {
-      // if note id change set state to new body
       this.setState((_, props) => ({title: props.title}))
     }
   }

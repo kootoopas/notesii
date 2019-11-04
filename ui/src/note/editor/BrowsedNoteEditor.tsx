@@ -1,23 +1,30 @@
-import {Component} from 'react'
+import {Component, ReactElement} from 'react'
 import {Note} from '../Note'
 import NoteEditor from './NoteEditor'
 import * as React from 'react'
 import {noop} from '../../utility/noop'
 import {NoteRepository} from '../repository/NoteRepository'
+import {noopNoteRepository} from '../index'
+import {NoteSnippet} from '../snippet/NoteSnippet'
 
 export interface BrowsedNoteEditorState {
   collection: Map<string, Note>,
   activeId: string | null
 }
 
-interface BrowsedNoteEditorProps {
+export interface BrowsedNoteEditorProps {
   noteRepository: NoteRepository
 }
 
 export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps, BrowsedNoteEditorState> {
-  state: Readonly<BrowsedNoteEditorState> = {
+  state = {
     collection: new Map(),
     activeId: null
+  }
+
+  constructor(props: BrowsedNoteEditorProps) {
+    super(props)
+    this.updateActiveNote = this.updateActiveNote.bind(this)
   }
 
   componentDidMount(): void {
@@ -40,18 +47,36 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     })
   }
 
+  updateActiveNote(note: Note): void {
+    this.addNotes([note])
+  }
+
   activateNote(id: string): void {
     this.setState({activeId: id})
   }
 
   render() {
-    if (!this.state.activeId) {
-      return <NoteEditor note={undefined} onNoteChangeSuccess={noop}
-                         noteRepository={this.props.noteRepository}/>
-    }
+    const noteSnippets: ReactElement[] = []
+    this.state.collection.forEach((note, id) => {
+      noteSnippets.push(<NoteSnippet key={id} note={note} active={this.state.activeId === id}/>)
+    })
 
-    return <NoteEditor note={this.state.collection.get(this.state.activeId)}
-                       onNoteChangeSuccess={note => this.addNotes([note])}
-                       noteRepository={this.props.noteRepository}/>
+    const noteEditor = this.state.activeId
+      ? (
+        <NoteEditor note={this.state.collection.get(this.state.activeId)}
+                    onNoteEditSuccess={this.updateActiveNote}
+                    noteRepository={this.props.noteRepository}/>
+      )
+      : (
+        <NoteEditor note={undefined} onNoteEditSuccess={noop}
+                    noteRepository={noopNoteRepository()}/>
+      )
+
+    return (
+      <div className='BrowsedNoteEditor grid-x'>
+        <div className='cell large-4'>{noteSnippets}</div>
+        <div className='cell large-8'>{noteEditor}</div>
+      </div>
+    )
   }
 }

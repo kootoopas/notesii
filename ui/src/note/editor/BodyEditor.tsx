@@ -42,6 +42,6 @@ export default class BodyEditor extends Component<BodyEditorProps, BodyEditorSta
   }
 
   render() {
-    return <textarea value={this.state.body || ''} onChange={this.onBodyChange}/>
+    return <textarea rows={28} value={this.state.body || ''} onChange={this.onBodyChange}/>
   }
 }

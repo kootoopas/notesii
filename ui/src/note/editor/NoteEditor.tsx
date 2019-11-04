@@ -4,12 +4,12 @@ import {Component} from 'react'
 import {Note} from '../Note'
 import BodyEditor from './BodyEditor'
 import TitleEditor from './TitleEditor'
-import NoteMetaInlineList from './NoteMetaInlineList'
+import NoteMetaInlineList from '../meta/NoteMetaInlineList'
 import {NoteRepository} from '../repository/NoteRepository'
 
 export interface NoteEditorProps {
   note?: Note,
-  onNoteChangeSuccess: (note: Note) => void,
+  onNoteEditSuccess: (note: Note) => void,
   noteRepository: NoteRepository
 }
 
@@ -39,7 +39,7 @@ export default class NoteEditor extends Component<NoteEditorProps> {
   private updateNote(note: Note): void {
     console.log(note.id, note.title, note.body)
     this.props.noteRepository.update(note.id, note.title, note.body).subscribe((note) => {
-      this.props.onNoteChangeSuccess(note)
+      this.props.onNoteEditSuccess(note)
     })
   }
 

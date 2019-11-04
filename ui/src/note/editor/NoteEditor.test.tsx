@@ -6,10 +6,10 @@ import NoteEditor from './NoteEditor'
 import TitleEditor from './TitleEditor'
 import {of} from 'rxjs'
 import BodyEditor from './BodyEditor'
-import NoteMetaInlineList from './NoteMetaInlineList'
+import NoteMetaInlineList from '../meta/NoteMetaInlineList'
 
 let wrapper: ShallowWrapper
-let onNoteChangeSuccessMock: any
+let onNoteEditSuccessMock: any
 let noteRepoMock: any
 
 const note: Note = {
@@ -21,12 +21,12 @@ const note: Note = {
 }
 
 beforeEach(() => {
-  onNoteChangeSuccessMock = jest.fn()
+  onNoteEditSuccessMock = jest.fn()
   noteRepoMock = {
     update: jest.fn()
   }
 
-  wrapper = shallow(<NoteEditor note={note} onNoteChangeSuccess={onNoteChangeSuccessMock}
+  wrapper = shallow(<NoteEditor note={note} onNoteEditSuccess={onNoteEditSuccessMock}
                                 noteRepository={noteRepoMock}/>)
 })
 
@@ -37,8 +37,8 @@ it('should update note on title change', () => {
 
   titleEditor.props().onTitleChange('i\'')
 
-  expect(onNoteChangeSuccessMock).toHaveBeenCalledWith({...note, title: 'i\''})
-  expect(onNoteChangeSuccessMock).toHaveBeenCalledTimes(1)
+  expect(onNoteEditSuccessMock).toHaveBeenCalledWith({...note, title: 'i\''})
+  expect(onNoteEditSuccessMock).toHaveBeenCalledTimes(1)
   expect(noteRepoMock.update).toHaveBeenCalledWith('a', 'i\'', 'x')
   expect(noteRepoMock.update).toHaveBeenCalledTimes(1)
 })
@@ -50,8 +50,8 @@ it('should update note on body change', () => {
 
   bodyEditor.props().onBodyChange('x\'')
 
-  expect(onNoteChangeSuccessMock).toHaveBeenCalledWith({...note, body: 'x\''})
-  expect(onNoteChangeSuccessMock).toHaveBeenCalledTimes(1)
+  expect(onNoteEditSuccessMock).toHaveBeenCalledWith({...note, body: 'x\''})
+  expect(onNoteEditSuccessMock).toHaveBeenCalledTimes(1)
   expect(noteRepoMock.update).toHaveBeenCalledWith('a', 'i', 'x\'')
   expect(noteRepoMock.update).toHaveBeenCalledTimes(1)
 })
@@ -66,7 +66,7 @@ it('should render creation and modification dates as meta key-value pairs', () =
 })
 
 it('should not provide meta pairs to list when no note is provided', () => {
-  wrapper = shallow(<NoteEditor note={undefined} onNoteChangeSuccess={onNoteChangeSuccessMock}
+  wrapper = shallow(<NoteEditor note={undefined} onNoteEditSuccess={onNoteEditSuccessMock}
                                 noteRepository={noteRepoMock}/>)
   const list = wrapper.find(NoteMetaInlineList)
   expect(list).toHaveLength(1)

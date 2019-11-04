@@ -8,7 +8,7 @@ import {NoteRepository} from './note/repository/NoteRepository'
 
 
 function initializeApp(noteRepository: NoteRepository) {
-  ReactDOM.render(<App noteRepository={noteRepository} />, document.getElementById('root'))
+  ReactDOM.render(<App noteRepository={noteRepository}/>, document.getElementById('root'))
 }
 
 initializeApp(new RemoteNoteRepository('http://localhost:8000/api/v1/notes'))
