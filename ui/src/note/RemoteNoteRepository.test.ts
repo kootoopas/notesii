@@ -1,13 +1,13 @@
 jest.mock('../utility/request')
 
-import { NoteRepository } from './NoteRepository';
+import { RemoteNoteRepository } from './RemoteNoteRepository';
 import {Note} from './Note';
 import {asMock, getDateString} from '../../test/utilities';
 import {notesApiBaseUrl} from '../../test/constants';
-import {request} from '../utility/request'
+import {createQueryString, request} from '../utility/request'
 import { of, throwError } from 'rxjs';
 
-let repo: NoteRepository
+let repo: RemoteNoteRepository
 
 const date1 = new Date()
 const date2 = new Date()
@@ -50,7 +50,7 @@ beforeEach(() => {
   requestMock = asMock(request)
   requestMock.mockRestore()
   resourceUrl = `${notesApiBaseUrl}/notes`
-  repo = new NoteRepository(resourceUrl)
+  repo = new RemoteNoteRepository(resourceUrl)
 })
 
 it('should be created', () => {
@@ -88,13 +88,10 @@ describe('getList', () => {
     repo.getList(0, 1).subscribe(notes => {
       expect(notes).toEqual([notes[0]])
       expect(requestMock).toHaveBeenCalledTimes(1)
-      expect(requestMock).toHaveBeenCalledWith(resourceUrl, {
-        method: 'GET',
-        body: new URLSearchParams({
-          page: '0',
-          size: '1'
-        })
-      })
+      expect(requestMock).toHaveBeenCalledWith(resourceUrl + createQueryString({
+        page: '0',
+        size: '1'
+      }), {method: 'GET',})
       done()
     })
   })
@@ -105,14 +102,10 @@ describe('getList', () => {
     repo.getList(1, 1).subscribe(notes => {
       expect(notes).toEqual([])
       expect(requestMock).toHaveBeenCalledTimes(1)
-      expect(requestMock).toHaveBeenCalledWith(resourceUrl, {
-          method: 'GET',
-          body: new URLSearchParams({
-            page: '1',
-            size: '1'
-          })
-        }
-      )
+      expect(requestMock).toHaveBeenCalledWith(resourceUrl + createQueryString({
+        page: '1',
+        size: '1'
+      }), {method: 'GET'})
       done()
     })
   })
@@ -125,15 +118,11 @@ describe('search', () => {
     repo.search('x', 0, 1).subscribe(notes => {
       expect(notes).toEqual([notes[0]])
       expect(requestMock).toHaveBeenCalledTimes(1)
-      expect(requestMock).toHaveBeenCalledWith(resourceUrl, {
-          method: 'GET',
-          body: new URLSearchParams({
-            text: 'x',
-            page: '0',
-            size: '1'
-          })
-        }
-      )
+      expect(requestMock).toHaveBeenCalledWith(resourceUrl + createQueryString({
+        text: 'x',
+        page: '0',
+        size: '1'
+      }), {method: 'GET'})
       done()
     })
   })
@@ -144,14 +133,11 @@ describe('search', () => {
     repo.search('z', 1, 1).subscribe(notes => {
       expect(notes).toEqual([])
       expect(requestMock).toHaveBeenCalledTimes(1)
-      expect(requestMock).toHaveBeenCalledWith(resourceUrl, {
-        method: 'GET',
-        body: new URLSearchParams({
-          text: 'z',
-          page: '1',
-          size: '1'
-        })
-      })
+      expect(requestMock).toHaveBeenCalledWith(resourceUrl + createQueryString({
+        text: 'z',
+        page: '1',
+        size: '1'
+      }), {method: 'GET'})
       done()
     })
   })

@@ -22,3 +22,18 @@ export function request<T extends any>(
     })
   )
 }
+
+export function createQueryString(params: {[key: string]: Object}): string {
+  return Object.entries(params)
+    .reduce(
+      (qs, [key, value]) => {
+        let prefix = '&'
+        if (qs === '') {
+          prefix = '?'
+        }
+
+        return qs + prefix + key + '=' + value.toString()
+      },
+      ''
+    )
+}
