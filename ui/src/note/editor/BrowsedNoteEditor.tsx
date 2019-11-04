@@ -1,25 +1,27 @@
 import {Component} from 'react'
-import {NoteRepository} from '../NoteRepository'
 import {Note} from '../Note'
 import NoteEditor from './NoteEditor'
 import * as React from 'react'
-import {NoteRepositoryContext} from '../NoteRepositoryContext'
 import {noop} from '../../utility/noop'
+import {NoteRepository} from '../repository/NoteRepository'
 
 export interface BrowsedNoteEditorState {
   collection: Map<string, Note>,
   activeId: string | null
 }
 
-export default class BrowsedNoteEditor extends Component<{}, BrowsedNoteEditorState> {
-  static contextType = NoteRepositoryContext
+interface BrowsedNoteEditorProps {
+  noteRepository: NoteRepository
+}
+
+export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps, BrowsedNoteEditorState> {
   state: Readonly<BrowsedNoteEditorState> = {
     collection: new Map(),
     activeId: null
   }
 
   componentDidMount(): void {
-    const noteRepository: NoteRepository = this.context
+    const {noteRepository} = this.props
     noteRepository.getList(0, 100).subscribe((notes) => {
       this.addNotes(notes)
       if (!this.state.activeId) {
@@ -44,10 +46,12 @@ export default class BrowsedNoteEditor extends Component<{}, BrowsedNoteEditorSt
 
   render() {
     if (!this.state.activeId) {
-      return <NoteEditor note={undefined} onNoteChangeSuccess={noop}/>
+      return <NoteEditor note={undefined} onNoteChangeSuccess={noop}
+                         noteRepository={this.props.noteRepository}/>
     }
 
     return <NoteEditor note={this.state.collection.get(this.state.activeId)}
-                       onNoteChangeSuccess={note => this.addNotes([note])}/>
+                       onNoteChangeSuccess={note => this.addNotes([note])}
+                       noteRepository={this.props.noteRepository}/>
   }
 }

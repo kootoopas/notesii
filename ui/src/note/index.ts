@@ -1,4 +1,4 @@
-import {NoteRepository} from './NoteRepository'
+import {NoteRepository} from './repository/NoteRepository'
 import {Note} from './Note'
 import {EMPTY, Observable} from 'rxjs'
 

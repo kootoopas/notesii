@@ -1,5 +1,5 @@
 import {Observable} from 'rxjs'
-import {Note} from './Note'
+import {Note} from '../Note'
 
 export interface NoteRepository {
   delete(id: string): Observable<boolean>

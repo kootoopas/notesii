@@ -1,11 +1,16 @@
 import React from 'react';
 import './App.css';
 import BrowsedNoteEditor from './note/editor/BrowsedNoteEditor'
+import {NoteRepository} from './note/repository/NoteRepository'
 
-const App: React.FC = () => {
+interface AppProps {
+  noteRepository: NoteRepository
+}
+
+const App: React.FC<AppProps> = (props) => {
   return (
     <div>
-      <BrowsedNoteEditor />
+      <BrowsedNoteEditor noteRepository={props.noteRepository} />
     </div>
   );
 }

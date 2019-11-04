@@ -1,10 +1,10 @@
 jest.mock('../utility/request')
 
 import { RemoteNoteRepository } from './RemoteNoteRepository';
-import {Note} from './Note';
-import {asMock, getDateString} from '../../test/utilities';
-import {notesApiBaseUrl} from '../../test/constants';
-import {createQueryString, request} from '../utility/request'
+import {Note} from '../Note';
+import {asMock, getDateString} from '../../../test/utilities';
+import {notesApiBaseUrl} from '../../../test/constants';
+import {createQueryString, request} from '../../utility/request'
 import { of, throwError } from 'rxjs';
 
 let repo: RemoteNoteRepository

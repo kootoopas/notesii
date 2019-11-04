@@ -1,10 +1,10 @@
 import {format} from 'date-fns'
 
 // @ts-ignore
-import {SpyInstance} from 'jest'
+import {Mock} from 'jest'
 
-export function asMock(f: Function): SpyInstance {
-  return f as unknown as SpyInstance
+export function asMock(f: Function): Mock {
+  return f as unknown as Mock
 }
 
 export function getDateString(date: Date): string {
