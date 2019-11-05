@@ -7,6 +7,7 @@ import {RemoteNoteRepository} from './note/repository/RemoteNoteRepository'
 import {NoteRepository} from './note/repository/NoteRepository'
 import {Logger} from './Logger'
 import ErrorStore from './note/ErrorStore'
+import ErrorBoundary from './ErrorBoundary'
 
 
 function initializeApp(window: Window, noteRepository: NoteRepository, errorStore: ErrorStore, errorLogger: Logger) {
@@ -14,20 +15,23 @@ function initializeApp(window: Window, noteRepository: NoteRepository, errorStor
     errorLogger.error(event.error)
   })
 
-  ReactDOM.render(<App noteRepository={noteRepository} errorStore={errorStore}/>, window.document.getElementById('root'))
+  ReactDOM.render(
+    <ErrorBoundary logger={errorLogger}>
+      <App noteRepository={noteRepository} errorStore={errorStore} errorLogger={errorLogger}/>
+    </ErrorBoundary>,
+    window.document.getElementById('root'))
 }
 
-const errorLogger = {
-  error(error: Error, meta: Map<string, any>): void {
-    console.error(error)
-    meta && meta.forEach((value, key) => {
-      console.error(`${key}: ${value}`)
-    })
-  }
-}
 initializeApp(
   window,
   new RemoteNoteRepository('http://localhost:8000/api/v1/notes'),
   new ErrorStore(),
-  errorLogger
+  {
+    error(error: Error, meta: Map<string, any>): void {
+      console.error(error)
+      meta && meta.forEach((value, key) => {
+        console.error(`${key}: ${value}`)
+      })
+    }
+  }
 )

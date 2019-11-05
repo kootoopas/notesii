@@ -4,13 +4,16 @@ import BrowsedNoteEditor from './note/editor/BrowsedNoteEditor'
 import {NoteRepository} from './note/repository/NoteRepository'
 import ErrorStore from './note/ErrorStore'
 import ErrorMessenger from './ErrorMessenger'
+import {Logger} from './Logger'
 
 interface AppProps {
   noteRepository: NoteRepository,
-  errorStore: ErrorStore
+  errorStore: ErrorStore,
+  errorLogger: Logger
 }
 
 const App: React.FC<AppProps> = (props) => {
+  throw new Error('asdf')
   return (
     <div>
       <ErrorMessenger errorStore={props.errorStore}/>
