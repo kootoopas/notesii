@@ -5,9 +5,10 @@ import './index.css';
 import App from './App';
 import {RemoteNoteRepository} from './note/repository/RemoteNoteRepository'
 import {NoteRepository} from './note/repository/NoteRepository'
-import {Logger} from './Logger'
+import {Logger} from './logger/Logger'
 import ErrorStore from './note/ErrorStore'
-import ErrorBoundary from './ErrorBoundary'
+import AppErrorBoundary from './AppErrorBoundary'
+import ConsoleLogger from './logger/ConsoleLogger'
 
 
 function initializeApp(window: Window, noteRepository: NoteRepository, errorStore: ErrorStore, errorLogger: Logger) {
@@ -16,9 +17,9 @@ function initializeApp(window: Window, noteRepository: NoteRepository, errorStor
   })
 
   ReactDOM.render(
-    <ErrorBoundary logger={errorLogger}>
+    <AppErrorBoundary logger={errorLogger}>
       <App noteRepository={noteRepository} errorStore={errorStore} errorLogger={errorLogger}/>
-    </ErrorBoundary>,
+    </AppErrorBoundary>,
     window.document.getElementById('root'))
 }
 

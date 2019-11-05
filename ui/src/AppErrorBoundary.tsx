@@ -1,5 +1,5 @@
 import {Component, ErrorInfo} from 'react'
-import {Logger} from './Logger'
+import {Logger} from './logger/Logger'
 import * as React from 'react'
 
 export interface ErrorBoundaryProps {
@@ -10,7 +10,7 @@ export interface ErrorBoundaryState {
   error?: Error
 }
 
-export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export default class AppErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   state = {
     error: undefined
   }
