@@ -6,6 +6,7 @@ import {noop} from '../../utility/noop'
 import {NoteRepository} from '../repository/NoteRepository'
 import {noopNoteRepository} from '../index'
 import NoteSnippet from '../snippet/NoteSnippet'
+import ErrorStore from '../ErrorStore'
 
 export interface BrowsedNoteEditorState {
   collection: Map<string, Note>,
@@ -13,7 +14,8 @@ export interface BrowsedNoteEditorState {
 }
 
 export interface BrowsedNoteEditorProps {
-  noteRepository: NoteRepository
+  noteRepository: NoteRepository,
+  errorStore: ErrorStore
 }
 
 export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps, BrowsedNoteEditorState> {
@@ -22,21 +24,26 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     activeId: null
   }
 
-
   constructor(props: BrowsedNoteEditorProps) {
     super(props)
     this.addNote = this.addNote.bind(this)
     this.activateNote = this.activateNote.bind(this)
+    this.setNoteEditFailureError = this.setNoteEditFailureError.bind(this)
   }
 
   componentDidMount(): void {
     const {noteRepository} = this.props
-    noteRepository.getList(0, 100).subscribe((notes) => {
-      this.addNotes(notes)
-      if (!this.state.activeId) {
-        this.activateNote(notes[0].id)
+    noteRepository.getList(0, 100).subscribe(
+      (notes) => {
+        this.addNotes(notes)
+        if (notes.length > 0 && !this.state.activeId) {
+          this.activateNote(notes[0].id)
+        }
+      },
+      (error: any) => {
+        this.props.errorStore.setError(error)
       }
-    })
+    )
   }
 
   addNotes(notes: Note[]): void {
@@ -51,6 +58,10 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
 
   addNote(note: Note): void {
     this.addNotes([note])
+  }
+
+  setNoteEditFailureError(note: Note, error: Error): void {
+    this.props.errorStore.setError(error)
   }
 
   activateNote(id: string): void {
@@ -68,10 +79,13 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
       ? (
         <NoteEditor note={this.state.collection.get(this.state.activeId)}
                     onNoteEditSuccess={this.addNote}
+                    onNoteEditFailure={this.setNoteEditFailureError}
                     noteRepository={this.props.noteRepository}/>
       )
       : (
-        <NoteEditor note={undefined} onNoteEditSuccess={noop}
+        <NoteEditor note={undefined}
+                    onNoteEditSuccess={noop}
+                    onNoteEditFailure={noop}
                     noteRepository={noopNoteRepository()}/>
       )
 

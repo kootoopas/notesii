@@ -10,6 +10,7 @@ import {NoteRepository} from '../repository/NoteRepository'
 export interface NoteEditorProps {
   note?: Note,
   onNoteEditSuccess: (note: Note) => void,
+  onNoteEditFailure: (note: Note, error: Error) => void,
   noteRepository: NoteRepository
 }
 
@@ -37,10 +38,14 @@ export default class NoteEditor extends Component<NoteEditorProps> {
   }
 
   private updateNote(note: Note): void {
-    console.log(note.id, note.title, note.body)
-    this.props.noteRepository.update(note.id, note.title, note.body).subscribe((note) => {
-      this.props.onNoteEditSuccess(note)
-    })
+    this.props.noteRepository.update(note.id, note.title, note.body).subscribe(
+      (note) => {
+        this.props.onNoteEditSuccess(note)
+      },
+      (error: Error) => {
+        this.props.onNoteEditFailure(note, error)
+      }
+    )
   }
 
   render() {

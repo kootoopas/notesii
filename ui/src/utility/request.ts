@@ -1,11 +1,10 @@
-import { from, Observable, throwError } from "rxjs"
-import { mergeMap } from "rxjs/operators"
+import {from, Observable, throwError} from "rxjs"
+import {first, mergeMap} from "rxjs/operators"
 
 export function request<T extends any>(
   url: string,
   init: RequestInit | {body?: Record<string, string>}
 ): Observable<T> {
-
   return from(fetch(
     url,
     {
@@ -13,6 +12,7 @@ export function request<T extends any>(
       body: init.body instanceof Object ? JSON.stringify(init.body) : init.body
     }
   )).pipe(
+    first(),
     mergeMap((response) => {
       if (!response.ok) {
         return throwError(response)

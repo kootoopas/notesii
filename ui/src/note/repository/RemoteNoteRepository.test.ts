@@ -1,4 +1,4 @@
-jest.mock('../utility/request')
+jest.mock('../../utility/request')
 
 import { RemoteNoteRepository } from './RemoteNoteRepository';
 import {Note} from '../Note';

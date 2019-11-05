@@ -23,7 +23,6 @@ export class RemoteNoteRepository implements NoteRepository {
   }
 
   getList(page: number, size: number): Observable<Note[]> {
-
     return request(
       this.resourceUrl + createQueryString({page, size}), {method: 'GET'}
     ).pipe(map((notes: any[]) => notes.map(note => marshalApiNote(note))))
@@ -67,7 +66,11 @@ export class RemoteNoteRepository implements NoteRepository {
   }
 
   private catchError(): OperatorFunction<Note, Note> {
-    return catchError((response: Response) => {
+    return catchError((response: Response | Error) => {
+      if (response instanceof Error) {
+        return throwError(response)
+      }
+
       return from(response.json())
         .pipe(
           mergeMap((body: any) => throwError(new Error(body.message)))
