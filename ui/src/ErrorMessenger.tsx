@@ -41,7 +41,7 @@ export default class ErrorMessenger extends Component<ErrorMessengerProps, Error
     return this.state.message
       ? (
         <div className='callout alert'>
-          <h5>{this.state.message!}</h5>
+          <h5 className='text-center'>{this.state.message!}</h5>
           <button className='close-button' aria-label='Dismiss alert' type='button'
                   onClick={this.clearError}>
             <span aria-hidden='true'>&times;</span>
