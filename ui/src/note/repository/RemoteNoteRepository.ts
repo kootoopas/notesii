@@ -14,7 +14,7 @@ export class RemoteNoteRepository implements NoteRepository {
   get(id: string): Observable<Note | null> {
     return request(`${this.resourceUrl}/${id}`, {method: 'GET'})
       .pipe(map((note: any) => {
-        if (isEmptyObject(note)) {
+        if (!note || isEmptyObject(note)) {
           return null
         }
 
