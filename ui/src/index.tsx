@@ -27,12 +27,5 @@ initializeApp(
   window,
   new RemoteNoteRepository('http://localhost:8000/api/v1/notes'),
   new ErrorStore(),
-  {
-    error(error: Error, meta: Map<string, any>): void {
-      console.error(error)
-      meta && meta.forEach((value, key) => {
-        console.error(`${key}: ${value}`)
-      })
-    }
-  }
+  new ConsoleLogger()
 )

@@ -4,7 +4,7 @@ import BrowsedNoteEditor from './note/editor/BrowsedNoteEditor'
 import {NoteRepository} from './note/repository/NoteRepository'
 import ErrorStore from './note/ErrorStore'
 import ErrorMessenger from './ErrorMessenger'
-import {Logger} from './Logger'
+import {Logger} from './logger/Logger'
 
 interface AppProps {
   noteRepository: NoteRepository,
