@@ -1,5 +1,5 @@
-import {NoteRepository} from './repository/NoteRepository'
-import {Note} from './Note'
+import {NoteRepository} from './NoteRepository'
+import {Note} from '../Note'
 import {EMPTY, Observable} from 'rxjs'
 
 export function noopNoteRepository(): NoteRepository {

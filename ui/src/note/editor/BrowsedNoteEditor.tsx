@@ -4,7 +4,7 @@ import NoteEditor from './NoteEditor'
 import * as React from 'react'
 import {noop} from '../../utility/noop'
 import {NoteRepository} from '../repository/NoteRepository'
-import {noopNoteRepository} from '../index'
+import {noopNoteRepository} from '../repository'
 import NoteSnippet from '../snippet/NoteSnippet'
 import ErrorStore from '../ErrorStore'
 
