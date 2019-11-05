@@ -39,10 +39,6 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     })
   }
 
-  componentWillUnmount(): void {
-
-  }
-
   addNotes(notes: Note[]): void {
     this.setState((state) => {
       const collection = new Map(state.collection)
