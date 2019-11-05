@@ -1,20 +1,35 @@
 import {Note} from '../Note'
 import * as React from 'react'
-import { Fragment } from 'react'
+import {Component, Fragment} from 'react'
 import './NoteSnippet.css'
 
 export interface NoteSnippetProps {
   note: Note,
-  active: boolean
+  active: boolean,
+  onActivationRequest: (id: string) => void
 }
 
-export const NoteSnippet: React.FC<NoteSnippetProps> = (props) => {
-  return (
-    <div className={['NoteSnippet', props.active ? 'NoteSnippet-active' : undefined].join(' ')}>
-      <h4 className='NoteSnippet-title'>{props.note.title || <Fragment>&nbsp;</Fragment>}</h4>
-      <p className='NoteSnippet-body'>{props.note.body || <Fragment>&nbsp;</Fragment>}</p>
-      <small
-        className='NoteSnippet-creation-date'>{props.note.creationDate.toLocaleString()}</small>
-    </div>
-  )
+export default class NoteSnippet extends Component<NoteSnippetProps> {
+
+  constructor(props: NoteSnippetProps) {
+    super(props)
+    this.onActivationRequest = this.onActivationRequest.bind(this)
+  }
+
+  onActivationRequest(): void {
+    this.props.onActivationRequest(this.props.note.id)
+  }
+
+  render() {
+    const {note, active} = this.props
+    return (
+      <div className={['NoteSnippet', active ? 'NoteSnippet-active' : undefined].join(' ')}
+           onClick={this.onActivationRequest}>
+        <h4 className='NoteSnippet-title'>{note.title || <Fragment>&nbsp;</Fragment>}</h4>
+        <p className='NoteSnippet-body'>{note.body || <Fragment>&nbsp;</Fragment>}</p>
+        <small
+          className='NoteSnippet-creation-date'>{note.creationDate.toLocaleString()}</small>
+      </div>
+    )
+  }
 }

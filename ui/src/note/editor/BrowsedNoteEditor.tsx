@@ -5,7 +5,7 @@ import * as React from 'react'
 import {noop} from '../../utility/noop'
 import {NoteRepository} from '../repository/NoteRepository'
 import {noopNoteRepository} from '../index'
-import {NoteSnippet} from '../snippet/NoteSnippet'
+import NoteSnippet from '../snippet/NoteSnippet'
 
 export interface BrowsedNoteEditorState {
   collection: Map<string, Note>,
@@ -22,9 +22,11 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     activeId: null
   }
 
+
   constructor(props: BrowsedNoteEditorProps) {
     super(props)
-    this.updateActiveNote = this.updateActiveNote.bind(this)
+    this.addNote = this.addNote.bind(this)
+    this.activateNote = this.activateNote.bind(this)
   }
 
   componentDidMount(): void {
@@ -37,6 +39,10 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     })
   }
 
+  componentWillUnmount(): void {
+
+  }
+
   addNotes(notes: Note[]): void {
     this.setState((state) => {
       const collection = new Map(state.collection)
@@ -47,7 +53,7 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
     })
   }
 
-  updateActiveNote(note: Note): void {
+  addNote(note: Note): void {
     this.addNotes([note])
   }
 
@@ -58,13 +64,14 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
   render() {
     const noteSnippets: ReactElement[] = []
     this.state.collection.forEach((note, id) => {
-      noteSnippets.push(<NoteSnippet key={id} note={note} active={this.state.activeId === id}/>)
+      noteSnippets.push(<NoteSnippet key={id} note={note} active={this.state.activeId === id}
+                                     onActivationRequest={this.activateNote}/>)
     })
 
     const noteEditor = this.state.activeId
       ? (
         <NoteEditor note={this.state.collection.get(this.state.activeId)}
-                    onNoteEditSuccess={this.updateActiveNote}
+                    onNoteEditSuccess={this.addNote}
                     noteRepository={this.props.noteRepository}/>
       )
       : (
@@ -74,8 +81,8 @@ export default class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps,
 
     return (
       <div className='BrowsedNoteEditor grid-x'>
-        <div className='cell large-4'>{noteSnippets}</div>
-        <div className='cell large-8'>{noteEditor}</div>
+        <div className='cell large-3'>{noteSnippets}</div>
+        <div className='cell large-9'>{noteEditor}</div>
       </div>
     )
   }
