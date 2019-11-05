@@ -234,7 +234,7 @@ describe('update', () => {
     })
   })
 
-  it('should throw error when server sends client error response', () => {
+  it('should throw error when server sends client error response', (done) => {
     requestMock.mockReturnValue(throwError({
       json: () => Promise.resolve({message: 'Error.'})
     }))
@@ -251,19 +251,21 @@ describe('update', () => {
               body: 'z'
             }
           })
+          done()
         }
       })
   })
 })
 
 describe('delete', () => {
-  it('should request note deletion', () => {
+  it('should request note deletion', (done) => {
     requestMock.mockReturnValue(of({}))
 
     repo.delete('a').subscribe((deletion) =>  {
       expect(deletion).toBeTruthy()
       expect(requestMock).toHaveBeenCalledTimes(1)
       expect(requestMock).toHaveBeenCalledWith(`${resourceUrl}/a`, {method: 'DELETE'})
+      done()
     })
   })
 })
