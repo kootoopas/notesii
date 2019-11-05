@@ -13,7 +13,6 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = (props) => {
-  throw new Error('asdf')
   return (
     <div>
       <ErrorMessenger errorStore={props.errorStore}/>
