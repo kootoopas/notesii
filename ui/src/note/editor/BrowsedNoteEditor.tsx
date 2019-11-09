@@ -21,10 +21,6 @@ class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps> {
     activeId: null
   }
 
-  constructor(props: BrowsedNoteEditorProps) {
-    super(props)
-  }
-
   componentDidMount(): void {
     this.props.loadCollection(0, 100)
   }
