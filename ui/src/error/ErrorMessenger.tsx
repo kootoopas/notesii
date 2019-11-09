@@ -5,7 +5,7 @@ import {RootState} from '../store'
 import {clearErrorMessage} from './store/actions'
 
 export interface ErrorMessengerProps {
-  message?: string
+  message: string | null
   clearError: () => void
 }
 

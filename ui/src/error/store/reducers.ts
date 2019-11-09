@@ -3,11 +3,11 @@ import {CLEAR_ERROR_MESSAGE} from './actions'
 import {LOAD_NOTE_COLLECTION_FAILURE, UPDATE_NOTE_FAILURE} from '../../note/store/actions'
 
 export interface ErrorMessengerState {
-  message?: string
+  message: string | null
 }
 
 export const errorMessengerReducer: Reducer<ErrorMessengerState> = (
-  state: ErrorMessengerState = {message: undefined},
+  state: ErrorMessengerState = {message: null},
   action: AnyAction
 ) => {
   switch(action.type) {
