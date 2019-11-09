@@ -3,7 +3,7 @@ import {Observable, OperatorFunction, throwError, from} from 'rxjs';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {createQueryString, request} from '../../utility/request';
 
-import {marshalApiNote} from '../marshallers';
+import {marshalApiNote} from './marshallers';
 import {isEmptyObject} from '../../utility/object'
 import {NoteRepository} from './NoteRepository'
 

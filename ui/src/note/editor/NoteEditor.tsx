@@ -5,16 +5,15 @@ import {Note} from '../Note'
 import BodyEditor from './BodyEditor'
 import TitleEditor from './TitleEditor'
 import NoteMetaInlineList from '../meta/NoteMetaInlineList'
-import {NoteRepository} from '../repository/NoteRepository'
+import {connect} from 'react-redux'
+import {updateNote} from '../store/actions'
 
 export interface NoteEditorProps {
   note?: Note,
-  onNoteEditSuccess: (note: Note) => void,
-  onNoteEditFailure: (note: Note, error: Error) => void,
-  noteRepository: NoteRepository
+  editNote: (note: Note) => void
 }
 
-export default class NoteEditor extends Component<NoteEditorProps> {
+class NoteEditor extends Component<NoteEditorProps> {
   constructor(props: NoteEditorProps) {
     super(props)
     this.updateTitle = this.updateTitle.bind(this)
@@ -22,30 +21,19 @@ export default class NoteEditor extends Component<NoteEditorProps> {
   }
 
   updateTitle(title: string): void {
-    const {note} = this.props
+    const {note, editNote} = this.props
     if (!note) {
       return
     }
-    this.updateNote({...note, title})
+    editNote({...note, title})
   }
 
   updateBody(body: string): void {
-    const {note} = this.props
+    const {note, editNote} = this.props
     if (!note) {
       return
     }
-    this.updateNote({...note, body})
-  }
-
-  private updateNote(note: Note): void {
-    this.props.noteRepository.update(note.id, note.title, note.body).subscribe(
-      (note) => {
-        this.props.onNoteEditSuccess(note)
-      },
-      (error: Error) => {
-        this.props.onNoteEditFailure(note, error)
-      }
-    )
+    editNote({...note, body})
   }
 
   render() {
@@ -64,3 +52,10 @@ export default class NoteEditor extends Component<NoteEditorProps> {
     )
   }
 }
+
+export default connect(
+  null,
+  (dispatch) => ({
+    editNote: (note: Note) => dispatch(updateNote(note))
+  })
+)(NoteEditor)
