@@ -10,7 +10,7 @@ import NoteEditor from './NoteEditor'
 
 export interface BrowsedNoteEditorProps {
   collection: Map<string, Note>
-  activeId?: string
+  activeId: string | null
   loadCollection: (page: number, size: number) => void,
   activateNote: (id: string) => void
 }
