@@ -1,10 +1,10 @@
 import {Note} from '../../Note'
-import {AnyAction, Reducer} from 'redux'
+import {AnyAction} from 'redux'
 import {LOAD_NOTE_COLLECTION_SUCCESS, UPDATE_NOTE_SUCCESS} from '../actions'
 
 export type NoteCollectionState = Map<string, Note>
 
-export const collectionReducer: Reducer<NoteCollectionState> = (state: NoteCollectionState = new Map(), action: AnyAction) => {
+export function collectionReducer(state: NoteCollectionState = new Map(), action: AnyAction) {
   switch (action.type) {
     case LOAD_NOTE_COLLECTION_SUCCESS:
       const collection = action.collection && action.collection.length
