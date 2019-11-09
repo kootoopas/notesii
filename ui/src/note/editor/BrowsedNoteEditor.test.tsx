@@ -43,6 +43,7 @@ beforeEach(() => {
       ])
     }
   }
+  // @ts-ignore
   connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
   component = connected.dive().shallow()
 })
@@ -64,6 +65,7 @@ it('should activate note snippet whose note is active', () => {
   expect(component.find(NoteSnippet).at(1).props().active).toBeFalsy()
 
   state = {...state, note: {...state.note, active: 'b'}}
+  // @ts-ignore
   connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
   component = connected.dive().shallow()
 
@@ -75,6 +77,7 @@ it('should load active note on editor', () => {
   expect(component.find(NoteEditor).props().note).toEqual(notes[0])
 
   state = {...state, note: {...state.note, active: 'b'}}
+  // @ts-ignore
   connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
   component = connected.dive().shallow()
 
