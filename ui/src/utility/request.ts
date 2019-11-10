@@ -9,7 +9,7 @@ export function request<T extends any>(
     url,
     {
       ...init,
-      body: init.body instanceof Object ? JSON.stringify(init.body) : init.body
+      body: init.body && JSON.stringify(init.body)
     }
   )).pipe(
     first(),
