@@ -3,7 +3,7 @@ import './App.css';
 import BrowsedNoteEditor from './note/editor/BrowsedNoteEditor'
 import ErrorMessenger from './error/ErrorMessenger'
 
-const App: React.FC = (props) => {
+const App: React.FC = () => {
   return (
     <div>
       <ErrorMessenger/>
