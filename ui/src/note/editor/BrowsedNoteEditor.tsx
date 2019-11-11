@@ -7,6 +7,7 @@ import {selectActiveNoteId, selectNoteCollection} from '../store/selectors'
 import {RootState} from '../../store'
 import {activateNote, loadNoteCollection} from '../store/actions'
 import NoteEditor from './NoteEditor'
+import NoteCreationKeyboardShortcutListener from './NoteCreationKeyboardShortcutListener'
 
 export interface BrowsedNoteEditorProps {
   collection: Map<string, Note>
@@ -42,6 +43,7 @@ class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps> {
               : <NoteEditor note={undefined}/>
           }
         </div>
+        <NoteCreationKeyboardShortcutListener/>
       </div>
     )
   }

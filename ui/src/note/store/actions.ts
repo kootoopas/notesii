@@ -5,6 +5,7 @@ export const LOAD_NOTE_COLLECTION = 'Load Note Collection'
 export const LOAD_NOTE_COLLECTION_SUCCESS = 'Load Note Collection Success'
 export const LOAD_NOTE_COLLECTION_FAILURE = 'Load Note Collection Failure'
 export const ACTIVATE_NOTE = 'Activate Note'
+export const CREATE_NOTE = 'Create Note'
 export const UPDATE_NOTE = 'Update Note'
 export const UPDATE_NOTE_SUCCESS = 'Update Note Success'
 export const UPDATE_NOTE_FAILURE = 'Update Note Failure'
@@ -48,6 +49,12 @@ export function activateNote(id: string): ActivateNoteAction {
   return {
     type: ACTIVATE_NOTE,
     id
+  }
+}
+
+export function createNote(): Action {
+  return {
+    type: CREATE_NOTE
   }
 }
 
