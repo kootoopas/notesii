@@ -1,6 +1,10 @@
 import {AnyAction, Reducer} from 'redux'
 import {CLEAR_ERROR_MESSAGE} from './actions'
-import {LOAD_NOTE_COLLECTION_FAILURE, UPDATE_NOTE_FAILURE} from '../../note/store/actions'
+import {
+  CREATE_NOTE_FAILURE,
+  LOAD_NOTE_COLLECTION_FAILURE,
+  UPDATE_NOTE_FAILURE
+} from '../../note/store/actions'
 
 export interface ErrorMessengerState {
   message: string | null
@@ -12,6 +16,7 @@ export const errorMessengerReducer: Reducer<ErrorMessengerState> = (
 ) => {
   switch(action.type) {
     case LOAD_NOTE_COLLECTION_FAILURE:
+    case CREATE_NOTE_FAILURE:
     case UPDATE_NOTE_FAILURE:
       return {message: action.error.message}
     case CLEAR_ERROR_MESSAGE:
