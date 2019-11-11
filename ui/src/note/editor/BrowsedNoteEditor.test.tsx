@@ -7,6 +7,7 @@ import NoteEditor from './NoteEditor'
 import createMockStore, {MockStoreEnhanced} from 'redux-mock-store'
 import {RootState} from '../../store'
 import {activateNote, loadNoteCollection} from '../store/actions'
+import NoteCreationKeyboardShortcutListener from './NoteCreationKeyboardShortcutListener'
 
 let connected: ShallowWrapper
 let component: ShallowWrapper
@@ -90,4 +91,8 @@ it('should express intent to switch active snippet note when one requests it', (
   noteSnippets.at(1).props().onActivationRequest('b')
 
   expect(storeMock.dispatch).toHaveBeenCalledWith(activateNote('b'))
+})
+
+it('should render note creation keyboard shortcut listener component', () => {
+  expect(component.find(NoteCreationKeyboardShortcutListener)).toHaveLength(1)
 })
