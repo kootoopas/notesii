@@ -1,6 +1,6 @@
 import {collectionReducer} from './collection'
 import {emptyAction} from '../../../../test/constants'
-import {loadNoteCollectionSuccess, updateNoteSuccess} from '../actions'
+import {createNoteSuccess, loadNoteCollectionSuccess, updateNoteSuccess} from '../actions'
 
 const initialState = new Map([
   ['a', {
@@ -48,7 +48,25 @@ it('should add notes on note collection load success', () => {
   expect(state).toEqual(expectedState)
 })
 
-it('should add note on note update success', () => {
+it('should prepend note to collection on note creation success', () => {
+  const note = {
+    id: 'c',
+    title: '',
+    body: '',
+    creationDate: new Date(),
+    modificationDate: new Date()
+  }
+  const state = collectionReducer(initialState, createNoteSuccess(note))
+
+  const expectedState = new Map([
+    ['c', note],
+    ...initialState.entries()
+  ])
+  expect(state).toEqual(expectedState)
+  expect([...expectedState.values()][0]).toEqual(note)
+})
+
+it('should update note on note update success', () => {
   const note = {
     id: 'b',
     title: 'j\'',

@@ -1,6 +1,6 @@
 import {Note} from '../../Note'
 import {AnyAction} from 'redux'
-import {LOAD_NOTE_COLLECTION_SUCCESS, UPDATE_NOTE_SUCCESS} from '../actions'
+import {CREATE_NOTE_SUCCESS, LOAD_NOTE_COLLECTION_SUCCESS, UPDATE_NOTE_SUCCESS} from '../actions'
 
 export type NoteCollectionState = Map<string, Note>
 
@@ -14,11 +14,15 @@ export function collectionReducer(state: NoteCollectionState = new Map(), action
         ...state.entries(),
         ...collection.entries()
       ])
-    case UPDATE_NOTE_SUCCESS:
+    case CREATE_NOTE_SUCCESS:
       return new Map([
+        [action.note.id, action.note],
         ...state.entries(),
-        [action.note.id, action.note]
       ])
+    case UPDATE_NOTE_SUCCESS:
+      const updatedCollection = new Map(state)
+      updatedCollection.set(action.note.id, action.note)
+      return updatedCollection
     default:
       return state
   }
