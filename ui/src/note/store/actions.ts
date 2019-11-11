@@ -6,6 +6,8 @@ export const LOAD_NOTE_COLLECTION_SUCCESS = 'Load Note Collection Success'
 export const LOAD_NOTE_COLLECTION_FAILURE = 'Load Note Collection Failure'
 export const ACTIVATE_NOTE = 'Activate Note'
 export const CREATE_NOTE = 'Create Note'
+export const CREATE_NOTE_SUCCESS = 'Create Note Success'
+export const CREATE_NOTE_FAILURE = 'Create Note Failure'
 export const UPDATE_NOTE = 'Update Note'
 export const UPDATE_NOTE_SUCCESS = 'Update Note Success'
 export const UPDATE_NOTE_FAILURE = 'Update Note Failure'
@@ -55,6 +57,26 @@ export function activateNote(id: string): ActivateNoteAction {
 export function createNote(): Action {
   return {
     type: CREATE_NOTE
+  }
+}
+
+export interface CreateNoteSuccessAction extends Action {
+  note: Note
+}
+export function createNoteSuccess(note: Note): CreateNoteSuccessAction {
+  return {
+    type: CREATE_NOTE_SUCCESS,
+    note
+  }
+}
+
+export interface CreateNoteFailureAction extends Action {
+  error: Error
+}
+export function createNoteFailure(error: Error): CreateNoteFailureAction {
+  return {
+    type: CREATE_NOTE_FAILURE,
+    error
   }
 }
 

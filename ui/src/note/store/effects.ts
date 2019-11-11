@@ -1,6 +1,6 @@
 import {ofType} from 'redux-observable'
 import {
-  activateNote,
+  activateNote, CREATE_NOTE, createNoteFailure, createNoteSuccess,
   LOAD_NOTE_COLLECTION,
   LOAD_NOTE_COLLECTION_SUCCESS,
   loadNoteCollectionFailure,
@@ -28,6 +28,16 @@ export const initActiveNote$: Effect = (action$, state$) => action$.pipe(
   map((action) => activateNote(action.collection[0].id))
 )
 
+export const createNote$: Effect = (action$, _, {noteRepository}) => action$.pipe(
+  ofType(CREATE_NOTE),
+  mergeMap((_) =>
+    noteRepository.create('', '').pipe(
+      map((note: Note) => createNoteSuccess(note)),
+      catchError((error) => of(createNoteFailure(error)))
+    )
+  )
+)
+
 export const updateNote$: Effect = (action$, state$, {noteRepository}) => action$.pipe(
   ofType(UPDATE_NOTE),
   mergeMap((action) =>
@@ -37,3 +47,4 @@ export const updateNote$: Effect = (action$, state$, {noteRepository}) => action
     )
   )
 )
+

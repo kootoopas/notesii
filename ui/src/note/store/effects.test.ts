@@ -1,6 +1,6 @@
-import {initActiveNote$, loadNoteCollection$, updateNote$} from './effects'
+import {createNote$, initActiveNote$, loadNoteCollection$, updateNote$} from './effects'
 import {
-  activateNote,
+  activateNote, createNote, createNoteFailure, createNoteSuccess,
   loadNoteCollection,
   loadNoteCollectionFailure,
   loadNoteCollectionSuccess, updateNote, updateNoteFailure, updateNoteSuccess
@@ -84,6 +84,44 @@ describe('init active note', () => {
     expect(observerMock.next).toHaveBeenCalledTimes(0)
     expect(observerMock.error).toHaveBeenCalledTimes(0)
     expect(observerMock.complete).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('create note', () => {
+  let dependencyMocks: any
+
+  beforeEach(() => {
+    dependencyMocks = {
+      noteRepository: {
+        create: jest.fn()
+      }
+    }
+    effect$ = createNote$(ActionsObservable.of(createNote()), createEmptyStateObservable(), dependencyMocks)
+  })
+
+  it('should update note and dispatch success on update note action', (done) => {
+    const note: Note = {
+      id: 'c',
+      title: '',
+      body: '',
+      creationDate: new Date(),
+      modificationDate: new Date()
+    }
+    dependencyMocks.noteRepository.create.mockReturnValue(of(note))
+
+    effect$.subscribe((action) => {
+      expect(action).toEqual(createNoteSuccess(note))
+      done()
+    })
+  })
+
+  it('should dispatch failure on note update error', (done) => {
+    dependencyMocks.noteRepository.create.mockReturnValue(throwError(new Error('Error.')))
+
+    effect$.subscribe((action) => {
+      expect(action).toEqual(createNoteFailure(new Error('Error.')))
+      done()
+    })
   })
 })
 
