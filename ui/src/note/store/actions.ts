@@ -11,6 +11,13 @@ export const CREATE_NOTE_FAILURE = 'Create Note Failure'
 export const UPDATE_NOTE = 'Update Note'
 export const UPDATE_NOTE_SUCCESS = 'Update Note Success'
 export const UPDATE_NOTE_FAILURE = 'Update Note Failure'
+export const DELETE_NOTE = 'Delete Note'
+export const DELETE_NOTE_SUCCESS = 'Delete Note Success'
+export const DELETE_NOTE_FAILURE = 'Delete Note Failure'
+
+export interface NoteFailureAction extends Action {
+  error: Error
+}
 
 export interface LoadNoteCollectionAction extends Action {
   page: number
@@ -34,10 +41,7 @@ export function loadNoteCollectionSuccess(collection: Note[]): LoadNoteCollectio
   }
 }
 
-export interface LoadNoteCollectionFailureAction extends Action {
-  error: Error
-}
-export function loadNoteCollectionFailure(error: Error): LoadNoteCollectionFailureAction {
+export function loadNoteCollectionFailure(error: Error): NoteFailureAction {
   return {
     type: LOAD_NOTE_COLLECTION_FAILURE,
     error
@@ -70,10 +74,7 @@ export function createNoteSuccess(note: Note): CreateNoteSuccessAction {
   }
 }
 
-export interface CreateNoteFailureAction extends Action {
-  error: Error
-}
-export function createNoteFailure(error: Error): CreateNoteFailureAction {
+export function createNoteFailure(error: Error): NoteFailureAction {
   return {
     type: CREATE_NOTE_FAILURE,
     error
@@ -100,12 +101,38 @@ export function updateNoteSuccess(note: Note): UpdateNoteSuccessAction {
   }
 }
 
-export interface UpdateNoteFailureAction extends Action {
-  error: Error
-}
-export function updateNoteFailure(error: Error): UpdateNoteFailureAction {
+export function updateNoteFailure(error: Error): NoteFailureAction {
   return {
     type: UPDATE_NOTE_FAILURE,
+    error
+  }
+}
+
+export interface DeleteNoteAction extends Action {
+  id: string
+}
+export function deleteNote(id: string): DeleteNoteAction {
+  return {
+    type: DELETE_NOTE,
+    id
+  }
+}
+
+export interface DeleteNoteSuccessAction extends Action {
+  id: string
+  nextActiveId: string | null
+}
+export function deleteNoteSuccess(id: string, nextActiveId: string | null): DeleteNoteSuccessAction {
+  return {
+    type: DELETE_NOTE_SUCCESS,
+    id,
+    nextActiveId
+  }
+}
+
+export function deleteNoteFailure(error: Error): NoteFailureAction {
+  return {
+    type: DELETE_NOTE_FAILURE,
     error
   }
 }

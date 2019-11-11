@@ -1,13 +1,14 @@
 import {shallow, ShallowWrapper} from 'enzyme'
 import {Note} from '../Note'
-import BrowsedNoteEditor from './BrowsedNoteEditor'
+import ActiveNoteEditor from './ActiveNoteEditor'
 import * as React from 'react'
-import NoteSnippet, {NoteSnippetProps} from '../snippet/NoteSnippet'
 import NoteEditor from './NoteEditor'
 import createMockStore, {MockStoreEnhanced} from 'redux-mock-store'
 import {RootState} from '../../store'
-import {activateNote, loadNoteCollection} from '../store/actions'
-import NoteCreationKeyboardShortcutListener from './NoteCreationKeyboardShortcutListener'
+import {loadNoteCollection} from '../store/actions'
+import NoteCreationKeyboardShortcutListener from './shortcuts/NoteCreationKeyboardShortcutListener'
+import NoteSnippetBrowser from '../snippet/NoteSnippetBrowser'
+import NoteDeletionKeyboardShortcutListener from './shortcuts/NoteDeletionKeyboardShortcutListener'
 
 let connected: ShallowWrapper
 let component: ShallowWrapper
@@ -45,7 +46,7 @@ beforeEach(() => {
     }
   }
   // @ts-ignore
-  connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
+  connected = shallow(<ActiveNoteEditor store={storeMock}/>)
   component = connected.dive().shallow()
 })
 
@@ -54,45 +55,25 @@ it('should express intent to load notes on mount', () => {
   expect(storeMock.dispatch).toHaveBeenCalledTimes(1)
 })
 
-it('should display note collection as snippet list', () => {
-  const noteSnippets: ShallowWrapper<NoteSnippetProps> = component.find(NoteSnippet)
-  expect(noteSnippets).toHaveLength(2)
-  expect(noteSnippets.at(0).props().note).toEqual(notes[0])
-  expect(noteSnippets.at(1).props().note).toEqual(notes[1])
-})
-
-it('should activate note snippet whose note is active', () => {
-  expect(component.find(NoteSnippet).at(0).props().active).toBeTruthy()
-  expect(component.find(NoteSnippet).at(1).props().active).toBeFalsy()
-
-  state = {...state, note: {...state.note, active: 'b'}}
-  // @ts-ignore
-  connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
-  component = connected.dive().shallow()
-
-  expect(component.find(NoteSnippet).at(0).props().active).toBeFalsy()
-  expect(component.find(NoteSnippet).at(1).props().active).toBeTruthy()
-})
-
 it('should load active note on editor', () => {
   expect(component.find(NoteEditor).props().note).toEqual(notes[0])
 
   state = {...state, note: {...state.note, active: 'b'}}
   // @ts-ignore
-  connected = shallow(<BrowsedNoteEditor store={storeMock}/>)
+  connected = shallow(<ActiveNoteEditor store={storeMock}/>)
   component = connected.dive().shallow()
 
   expect(component.find(NoteEditor).props().note).toEqual(notes[1])
 })
 
-it('should express intent to switch active snippet note when one requests it', () => {
-  let noteSnippets: ShallowWrapper<NoteSnippetProps> = component.find(NoteSnippet)
-
-  noteSnippets.at(1).props().onActivationRequest('b')
-
-  expect(storeMock.dispatch).toHaveBeenCalledWith(activateNote('b'))
+it('should render note snippet browser', () => {
+  expect(component.find(NoteSnippetBrowser)).toHaveLength(1)
 })
 
 it('should render note creation keyboard shortcut listener component', () => {
   expect(component.find(NoteCreationKeyboardShortcutListener)).toHaveLength(1)
+})
+
+it('should render note deletion keyboard shortcut listener component', () => {
+  expect(component.find(NoteDeletionKeyboardShortcutListener)).toHaveLength(1)
 })

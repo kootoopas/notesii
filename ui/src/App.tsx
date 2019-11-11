@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import BrowsedNoteEditor from './note/editor/BrowsedNoteEditor'
+import ActiveNoteEditor from './note/editor/ActiveNoteEditor'
 import ErrorMessenger from './error/ErrorMessenger'
 
 const App: React.FC = () => {
   return (
     <div>
       <ErrorMessenger/>
-      <BrowsedNoteEditor/>
+      <ActiveNoteEditor/>
     </div>
   )
 }

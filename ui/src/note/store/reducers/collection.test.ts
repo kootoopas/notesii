@@ -1,6 +1,11 @@
 import {collectionReducer} from './collection'
 import {emptyAction} from '../../../../test/constants'
-import {createNoteSuccess, loadNoteCollectionSuccess, updateNoteSuccess} from '../actions'
+import {
+  createNoteSuccess,
+  deleteNoteSuccess,
+  loadNoteCollectionSuccess,
+  updateNoteSuccess
+} from '../actions'
 
 const initialState = new Map([
   ['a', {
@@ -78,5 +83,13 @@ it('should update note on note update success', () => {
 
   const expectedState = new Map(initialState)
   expectedState.set('b', note)
+  expect(state).toEqual(expectedState)
+})
+
+it('should remove deleted note from collection', () => {
+  const state = collectionReducer(initialState, deleteNoteSuccess('a', 'b'))
+
+  const expectedState = new Map(initialState)
+  expectedState.delete('a')
   expect(state).toEqual(expectedState)
 })

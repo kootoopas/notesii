@@ -26,6 +26,7 @@ const note: Note = {
 beforeEach(() => {
   storeMock = createMockStore<RootState>()()
   spyOn(storeMock, 'dispatch')
+  // @ts-ignore
   connected = shallow(<NoteEditor note={note} store={storeMock}/>)
   component = connected.dive()
 })
@@ -60,6 +61,7 @@ it('should render creation and modification dates as meta key-value pairs', () =
 })
 
 it('should not provide meta pairs to list when no note is provided', () => {
+  // @ts-ignore
   connected = shallow(<NoteEditor note={undefined} store={storeMock}/>)
   component = connected.dive()
 

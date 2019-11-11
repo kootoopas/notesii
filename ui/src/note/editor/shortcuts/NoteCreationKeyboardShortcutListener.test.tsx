@@ -1,8 +1,8 @@
 import {shallow, ShallowWrapper} from 'enzyme'
 import createMockStore, {MockStoreEnhanced} from 'redux-mock-store'
-import {asMock, createEmptyRootState} from '../../../test/utilities'
-import {RootState} from '../../store'
-import {createNote} from '../store/actions'
+import {asMock, createEmptyRootState} from '../../../../test/utilities'
+import {RootState} from '../../../store'
+import {createNote} from '../../store/actions'
 import NoteCreationKeyboardShortcutListener from './NoteCreationKeyboardShortcutListener'
 import * as React from 'react'
 

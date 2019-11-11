@@ -1,22 +1,23 @@
-import {Component, ReactElement} from 'react'
+import {Component} from 'react'
 import {Note} from '../Note'
 import * as React from 'react'
-import NoteSnippet from '../snippet/NoteSnippet'
 import {connect} from 'react-redux'
 import {selectActiveNoteId, selectNoteCollection} from '../store/selectors'
 import {RootState} from '../../store'
-import {activateNote, loadNoteCollection} from '../store/actions'
+import {loadNoteCollection} from '../store/actions'
 import NoteEditor from './NoteEditor'
-import NoteCreationKeyboardShortcutListener from './NoteCreationKeyboardShortcutListener'
+import NoteCreationKeyboardShortcutListener from './shortcuts/NoteCreationKeyboardShortcutListener'
+import NoteSnippetBrowser from '../snippet/NoteSnippetBrowser'
+import NoteDeletionKeyboardShortcutListener from './shortcuts/NoteDeletionKeyboardShortcutListener'
 
-export interface BrowsedNoteEditorProps {
+export interface ActiveNoteEditorProps {
   collection: Map<string, Note>
   activeId: string | null
   loadCollection: (page: number, size: number) => void,
   activateNote: (id: string) => void
 }
 
-class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps> {
+class ActiveNoteEditor extends Component<ActiveNoteEditorProps> {
   state = {
     collection: new Map(),
     activeId: null
@@ -27,15 +28,11 @@ class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps> {
   }
 
   render() {
-    const noteSnippets: ReactElement[] = []
-    this.props.collection.forEach((note, id) => {
-      noteSnippets.push(<NoteSnippet key={id} note={note} active={this.props.activeId === id}
-                                     onActivationRequest={this.props.activateNote}/>)
-    })
-
     return (
-      <div className='BrowsedNoteEditor grid-x'>
-        <div className='cell large-3'>{noteSnippets}</div>
+      <div className='ActiveNoteEditor grid-x'>
+        <div className='cell large-3'>
+          <NoteSnippetBrowser/>
+        </div>
         <div className='cell large-9'>
           {
             this.props.activeId
@@ -44,6 +41,7 @@ class BrowsedNoteEditor extends Component<BrowsedNoteEditorProps> {
           }
         </div>
         <NoteCreationKeyboardShortcutListener/>
+        <NoteDeletionKeyboardShortcutListener/>
       </div>
     )
   }
@@ -56,6 +54,5 @@ export default connect(
   }),
   (dispatch) => ({
     loadCollection: (page: number, size: number) => dispatch(loadNoteCollection(page, size)),
-    activateNote: (id: string) => dispatch(activateNote(id))
   })
-)(BrowsedNoteEditor)
+)(ActiveNoteEditor)

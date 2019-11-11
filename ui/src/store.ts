@@ -8,7 +8,13 @@ import {collectionReducer, NoteCollectionState} from './note/store/reducers/coll
 import {ActiveNoteIdState, activeReducer} from './note/store/reducers/active'
 import {combineEpics, createEpicMiddleware, Epic} from 'redux-observable'
 import {NoteRepository} from './note/repository/NoteRepository'
-import {createNote$, initActiveNote$, loadNoteCollection$, updateNote$} from './note/store/effects'
+import {
+  createNote$,
+  deleteNote$,
+  initActiveNote$,
+  loadNoteCollection$,
+  updateNote$
+} from './note/store/effects'
 import {errorMessengerReducer, ErrorMessengerState} from './error/store/reducers'
 
 
@@ -57,7 +63,8 @@ export function createStore(noteRepository: NoteRepository) {
       loadNoteCollection$,
       initActiveNote$,
       createNote$,
-      updateNote$
+      updateNote$,
+      deleteNote$
     )
   )
 

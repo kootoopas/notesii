@@ -1,10 +1,19 @@
 import {ofType} from 'redux-observable'
 import {
-  activateNote, CREATE_NOTE, createNoteFailure, createNoteSuccess,
+  activateNote,
+  CREATE_NOTE,
+  createNoteFailure,
+  createNoteSuccess,
+  DELETE_NOTE,
+  deleteNoteFailure,
+  deleteNoteSuccess,
   LOAD_NOTE_COLLECTION,
   LOAD_NOTE_COLLECTION_SUCCESS,
   loadNoteCollectionFailure,
-  loadNoteCollectionSuccess, UPDATE_NOTE, updateNoteFailure, updateNoteSuccess
+  loadNoteCollectionSuccess,
+  UPDATE_NOTE,
+  updateNoteFailure,
+  updateNoteSuccess
 } from './actions'
 import {catchError, filter, map, mergeMap} from 'rxjs/operators'
 import {of} from 'rxjs'
@@ -44,6 +53,31 @@ export const updateNote$: Effect = (action$, state$, {noteRepository}) => action
     noteRepository.update(action.note.id, action.note.title, action.note.body).pipe(
       map((note) => updateNoteSuccess(note)),
       catchError(error => of(updateNoteFailure(error)))
+    )
+  )
+)
+
+export const deleteNote$: Effect = (action$, state$, {noteRepository}) => action$.pipe(
+  ofType(DELETE_NOTE),
+  mergeMap((action) =>
+    noteRepository.delete(action.id).pipe(
+      map(() => {
+        const getNextActiveId = () => {
+          if (action.id !== state$.value.note.active) {
+            return state$.value.note.active
+          }
+
+          const collectionArray = [...state$.value.note.collection.values()]
+          const deletedNoteIndex: number = collectionArray.findIndex((note) => note.id === action.id)
+          if (deletedNoteIndex === 0) {
+            return collectionArray.length > 1 ? collectionArray[1].id : null
+          }
+          return collectionArray[deletedNoteIndex - 1].id
+        }
+
+        return deleteNoteSuccess(action.id, getNextActiveId())
+      }),
+      catchError(error => of(deleteNoteFailure(error)))
     )
   )
 )

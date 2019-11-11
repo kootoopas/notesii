@@ -1,6 +1,6 @@
 import {activeReducer} from './active'
 import {emptyAction} from '../../../../test/constants'
-import {activateNote, createNoteSuccess} from '../actions'
+import {activateNote, createNoteSuccess, deleteNoteSuccess} from '../actions'
 import {Note} from '../../Note'
 
 it('should default to no active note', () => {
@@ -21,4 +21,8 @@ it('should activate newly created note', () => {
     modificationDate: new Date()
   }
   expect(activeReducer(undefined, createNoteSuccess(note))).toEqual('a')
+})
+
+it('should set next active id from note deletion success when it occurs', () => {
+  expect(activeReducer(undefined, deleteNoteSuccess('a', 'b'))).toEqual('b')
 })

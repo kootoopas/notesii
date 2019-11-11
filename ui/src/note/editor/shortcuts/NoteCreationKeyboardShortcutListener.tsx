@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import {connect} from 'react-redux'
-import {createNote} from '../store/actions'
+import {createNote} from '../../store/actions'
 import {fromEvent, Subscription} from 'rxjs'
 import {filter, throttleTime} from 'rxjs/operators'
 
