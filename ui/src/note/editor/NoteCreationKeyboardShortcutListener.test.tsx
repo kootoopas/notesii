@@ -42,7 +42,7 @@ it('should remove shortcut on unmount', () => {
   expect(storeMock.dispatch).not.toHaveBeenCalled()
 })
 
-it('should limit note creation to one per 200ms', (done) => {
+it('should limit note creation to one per 200ms', () => {
   jest.useFakeTimers()
 
   simulateKeyboardShortcutDown()
