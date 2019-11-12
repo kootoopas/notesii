@@ -23,6 +23,6 @@ it('should activate newly created note', () => {
   expect(activeReducer(undefined, createNoteSuccess(note))).toEqual('a')
 })
 
-it('should set next active id from note deletion success when it occurs', () => {
+it('should get next active id from note deletion success when it occurs', () => {
   expect(activeReducer(undefined, deleteNoteSuccess('a', 'b'))).toEqual('b')
 })
