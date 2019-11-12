@@ -1,9 +1,24 @@
-import {createNote$, initActiveNote$, loadNoteCollection$, updateNote$} from './effects'
 import {
-  activateNote, createNote, createNoteFailure, createNoteSuccess,
+  createNote$,
+  deleteNote$,
+  initActiveNote$,
+  loadNoteCollection$,
+  updateNote$
+} from './effects'
+import {
+  activateNote,
+  createNote,
+  createNoteFailure,
+  createNoteSuccess,
+  deleteNote,
+  deleteNoteFailure,
+  deleteNoteSuccess,
   loadNoteCollection,
   loadNoteCollectionFailure,
-  loadNoteCollectionSuccess, updateNote, updateNoteFailure, updateNoteSuccess
+  loadNoteCollectionSuccess,
+  updateNote,
+  updateNoteFailure,
+  updateNoteSuccess
 } from './actions'
 import {ActionsObservable} from 'redux-observable'
 import {
@@ -14,6 +29,7 @@ import {
 import {Note} from '../Note'
 import {Observable, of, throwError} from 'rxjs'
 import {AnyAction} from 'redux'
+import {RootState} from '../../store'
 
 const notes: Note[] = [
   {
@@ -139,7 +155,7 @@ describe('update note', () => {
     effect$ = updateNote$(ActionsObservable.of(updateNote(note)), createEmptyStateObservable(), dependencyMocks)
   })
 
-  it('should update note and dispatch success on update note action', (done) => {
+  it('should update note and dispatch success on note update action', (done) => {
     dependencyMocks.noteRepository.update.mockReturnValue(of(note))
 
     effect$.subscribe((action) => {
@@ -155,5 +171,84 @@ describe('update note', () => {
       expect(action).toEqual(updateNoteFailure(new Error('Error.')))
       done()
     })
+  })
+})
+
+describe('delete note', () => {
+  let dependencyMocks: any
+  let state: RootState
+
+  beforeEach(() => {
+    dependencyMocks = {
+      noteRepository: {
+        delete: jest.fn()
+      }
+    }
+    state = createEmptyRootState()
+    state.note.collection = new Map([
+      [notes[0].id, notes[0]],
+      [notes[1].id, notes[1]],
+      ['c', {
+        id: 'c',
+        title: 'k',
+        body: 'z',
+        creationDate: new Date(),
+        modificationDate: new Date()
+      }]
+    ])
+    dependencyMocks.noteRepository.delete.mockReturnValue(of(true))
+  })
+
+  it('should delete note and dispatch success with previous adjacent note of collection as next active id when active note is deleted', (done) => {
+    state.note.active = 'b'
+
+    deleteNote$(ActionsObservable.of(deleteNote('b')), createStateObservable(state), dependencyMocks)
+      .subscribe((action) => {
+        expect(action).toEqual(deleteNoteSuccess('b', 'a'))
+        done()
+      })
+  })
+
+  it('should delete note and dispatch success with following adjacent note of collection as next active id when first-in-collection active note is deleted', (done) => {
+    state.note.active = 'a'
+
+    deleteNote$(ActionsObservable.of(deleteNote('a')), createStateObservable(state), dependencyMocks)
+      .subscribe((action) => {
+        expect(action).toEqual(deleteNoteSuccess('a', 'b'))
+        done()
+      })
+  })
+
+  it('should delete note and dispatch success without changing active note when non-active note is deleted', (done) => {
+    state.note.active = 'a'
+
+    deleteNote$(ActionsObservable.of(deleteNote('b')), createStateObservable(state), dependencyMocks)
+      .subscribe((action) => {
+        expect(action).toEqual(deleteNoteSuccess('b', 'a'))
+        done()
+      })
+  })
+
+  it('should delete note and dispatch success with null active id when sole note of collection is active and deleted', (done) => {
+    state.note.collection = new Map([
+      [notes[0].id, notes[0]]
+    ])
+    state.note.active = 'a'
+
+    deleteNote$(ActionsObservable.of(deleteNote('a')), createStateObservable(state), dependencyMocks)
+      .subscribe((action) => {
+        expect(action).toEqual(deleteNoteSuccess('a', null))
+        done()
+      })
+  })
+
+  it('should dispatch failure on note deletion error', (done) => {
+    dependencyMocks.noteRepository.delete.mockReturnValue(throwError(new Error('Error.')))
+
+    deleteNote$(ActionsObservable.of(deleteNote('b')), createStateObservable(state), dependencyMocks)
+      .subscribe((action) => {
+        expect(action).toEqual(deleteNoteFailure(new Error('Error.')))
+        done()
+      })
   })
 })
