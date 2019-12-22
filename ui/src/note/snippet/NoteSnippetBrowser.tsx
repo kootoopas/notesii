@@ -9,6 +9,7 @@ import {Note} from '../Note'
 import {Component, Fragment} from 'react'
 import NoteSnippet from './NoteSnippet'
 import * as React from 'react'
+import './NoteSnippetBrowser.css'
 
 export interface NoteSnippetBrowserProps {
   collection: Note[],
@@ -19,11 +20,11 @@ export interface NoteSnippetBrowserProps {
 class NoteSnippetBrowser extends Component<NoteSnippetBrowserProps> {
   render() {
     return (
-      <Fragment>
+      <div className='NoteSnippetBrowser'>
         {this.props.collection.map((note) =>
           <NoteSnippet key={note.id} note={note} active={this.props.activeId === note.id}
                        onActivationRequest={this.props.activateNote}/>)}
-      </Fragment>
+      </div>
     )
   }
 }
