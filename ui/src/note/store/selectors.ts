@@ -11,6 +11,10 @@ export function selectNoteCollectionAsArray(state: RootState): Note[] {
   return [...selectNoteCollection(state).values()]
 }
 
+export function selectNoteCollectionCount(state: RootState): number {
+  return selectNoteCollection(state).size
+}
+
 export function selectActiveNoteId(state: RootState): ActiveNoteIdState {
   return state.note.active
 }

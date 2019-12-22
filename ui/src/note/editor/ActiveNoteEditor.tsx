@@ -9,6 +9,7 @@ import NoteEditor from './NoteEditor'
 import NoteCreationKeyboardShortcutListener from './shortcuts/NoteCreationKeyboardShortcutListener'
 import NoteSnippetBrowser from '../snippet/NoteSnippetBrowser'
 import NoteDeletionKeyboardShortcutListener from './shortcuts/NoteDeletionKeyboardShortcutListener'
+import NoteCounter from '../NoteCounter';
 
 export interface ActiveNoteEditorProps {
   collection: Map<string, Note>
@@ -31,6 +32,7 @@ class ActiveNoteEditor extends Component<ActiveNoteEditorProps> {
     return (
       <div className='ActiveNoteEditor grid-x'>
         <div className='cell large-3'>
+          <h5 className='text-right'>All Notes  <NoteCounter/></h5>
           <NoteSnippetBrowser/>
         </div>
         <div className='cell large-9'>
