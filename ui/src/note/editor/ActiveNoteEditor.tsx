@@ -10,6 +10,7 @@ import NoteCreationKeyboardShortcutListener from './shortcuts/NoteCreationKeyboa
 import NoteSnippetBrowser from '../snippet/NoteSnippetBrowser'
 import NoteDeletionKeyboardShortcutListener from './shortcuts/NoteDeletionKeyboardShortcutListener'
 import NoteCounter from '../NoteCounter';
+import NoteNavigationKeyboardShortcutListener from './shortcuts/NoteNavigationKeyboardShortcutListener';
 
 export interface ActiveNoteEditorProps {
   collection: Map<string, Note>
@@ -44,6 +45,7 @@ class ActiveNoteEditor extends Component<ActiveNoteEditorProps> {
         </div>
         <NoteCreationKeyboardShortcutListener/>
         <NoteDeletionKeyboardShortcutListener/>
+        <NoteNavigationKeyboardShortcutListener/>
       </div>
     )
   }
